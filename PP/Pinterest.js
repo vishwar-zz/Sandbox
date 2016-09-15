@@ -130,3 +130,8 @@ function getPinEmbedUrl(){
     return a;
 }
 
+function loadUrl(location)
+{
+    this.document.location.href = location;
+}
+
