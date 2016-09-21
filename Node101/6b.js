@@ -6,7 +6,7 @@ module.exports = function(dirName, fileExt, callback)
 {
     var ext = '.' + fileExt 
 
-    fs.readdir('zxz', function (err, files) {  
+    fs.readdir(dirName, function (err, files) {  
        if (err) return callback(err)
        
        files.forEach(function(file) {  

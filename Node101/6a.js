@@ -1,4 +1,4 @@
-var mymodule = require('./exercise6b.js')
+var mymodule = require('./6b.js')
 
 mymodule(process.argv[2], process.argv[3], function (err, data)
          {
