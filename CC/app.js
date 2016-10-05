@@ -1,34 +1,40 @@
-var gdocs = require('./gdocs.js');
-var debug = 0;
-var fs = require('fs');
-var http = require('http'); 
+var React = require('react')
+var ReactDOM = require('react-dom')
 
-http.createServer(function(req, res) { 
-  waiting = 1;
-  fs.readFile('client_secret.json', function processClientSecrets(err, content) {
-    if (err) {
-      console.log('Error loading client secret file: ' + err);
-      return;
-    }
+var Shows = React.createClass({
+getInitialState: function() {
+  return {
+    showName: '',
+    startTime: '',
+    endTime: '',
+    wheretoWatch: ''
+  };
+},
 
-    res.writeHead(200, {
-    'Content-Type': 'text/html'
+componentDidMount: function() {
+  this.serverRequest = $.get(this.props.source, function (result) {
+    var lastShow = result[0];
+    this.setState({
+      showName: lastShow.Name,
+      startTime: lastShow.Start,
+      endTime: lastShow.End,
+      wheretoWatch: lastShow.Where
     });
+  }.bind(this));
+},
 
-    getWebPageBody(res, content, function(pageHtml) {  
-      res.write(pageHtml);
-      res.end();
-    });
+componentWillUnmount: function() {
+  this.serverRequest.abort();
+},
 
-  });
-}).listen(8888, '127.0.0.1');
-console.log('Server running at http://127.0.0.1:8888');
+render: function() {
+  return (
+      <div>{this.state.lastShow}</div>
+  );
+}
+});
 
-
-function getWebPageBody(res, content, callback) {
-    gdocs.authorize(JSON.parse(content), function (auth) {
-      gdocs.getShowName(auth, function(html){
-        callback(html); // invoke callback    
-      });
-    });
-};
+ReactDOM.render(
+<Shows source="http://127.0.0.1:8888/getCurrentShows" />,
+mountNode
+);

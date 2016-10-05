@@ -32,7 +32,7 @@ module.exports = {
 
   getShowName: function (auth, callback) {
     var sheets = google.sheets('v4');
-    var pageHtmlToReturn = "";
+    var showJSON = "";
     var showName = "";
     var showStartTime = "";
     var showEndTime = "";
@@ -62,18 +62,28 @@ module.exports = {
           showWhereToWatch = row[3].toString();
         }
 
-        pageHtmlToReturn = '<!doctype html>\n<html lang="en">\n' + 
+        /*showJSON = '<!doctype html>\n<html lang="en">\n' + 
           '\n<meta charset="utf-8">\n<title>Schedule</title>\n' + 
           '<style type="text/css">* {font-family:arial, sans-serif;}</style>\n' + 
           '\n\n<h1>Current Shows</h1>\n' + 
           '<div id="content"><p>' + showName +'</p><ul><li>Start Time: ' + showStartTime + '</li><li>End Time: ' + showEndTime + '</li><li>Where to watch: ' + showWhereToWatch + '</li></ul></div>' + 
-          '\n\n'; 
-        callback(pageHtmlToReturn);
+          '\n\n'; */
+      
+        callback(JSON.stringify(getshowJSON(showName, showStartTime, showEndTime, showWhereToWatch)));
       }
     });
   }
 };
 
+function getshowJSON(showName, showStartTime, showEndTime, showWhereToWatch) {
+  
+  return {
+    Name: showName,
+    Start: showStartTime,
+    End: showEndTime,
+    Where: showWhereToWatch,
+  };
+}
 
 function getNewToken(oauth2Client, callback) {
   debug && console.log('in getNewToken');
